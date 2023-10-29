@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>elsa</title>
+    <!-- 跟表格相关的包的导入 -->
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.css">
+
+    <!-- jQuery -->
+    <script type="text/javascript" charset="utf8" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <!-- Bootstrap JS -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+    <!-- DataTables -->
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.js"></script>
+
+    <!-- 引入Google字体 -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        /* 顶部横栏样式 */
+        .top-bar {
+            background-color: #0a2347;
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f5f7;
+        }
+
+        
+        /* 导航栏样式 */
+        .navbar {
+            background-color: #00468b;
+            overflow: hidden;
+            padding: 10px 0;
+            display: flex; /* 添加 flexbox 布局 */
+            justify-content: flex-end; /* 使内容靠右对齐 */
+        }
+
+        .navbar a {
+            display: block;
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+            font-weight: 500;
+            position: relative;
+            transition: border-bottom 0.3s;
+        }
+
+        .navbar a::after {
+        content: '';
+        position: absolute;
+        width: 0;
+        height: 2px;
+        bottom: 0;
+        left: 50%;
+        background-color: white;
+        transition: width 0.3s, left 0.3s;
+    }
+
+    .navbar a:hover::after {
+        width: 100%;
+        left: 0;
+    }
+
+
+
+        /* 默认隐藏所有部分 */
+        .section-content {
+            display: none;
+            margin: 20px;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+        }
+
+        /* 上传部分样式 */
+        .upload-form h2,
+        .upload-form label,
+        .upload-form input,
+        .upload-form select {
+            margin-bottom: 10px;
+        }
+
+        .upload-form input[type="submit"] {
+            background-color: #00468b;
+            color: white;
+            cursor: pointer;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+
+    </style>
+
+    <script>
+        function showSection(id) {
+            // 隐藏所有部分
+            const sections = document.querySelectorAll('.section-content');
+            sections.forEach(section => {
+                section.style.display = 'none';
+            });
+
+            // 显示指定的部分
+            const targetSection = document.getElementById(id);
+            if (targetSection) {
+                targetSection.style.display = 'block';
+            }
+        }
+    </script>
+
+</head>
+
+<body>
+    
+
+    <!-- 顶部横栏 -->
+    <div class="top-bar">
+        ELSA Caculation
+    </div>
+    <!-- 导航栏开始 -->
+    <div class="navbar">
+        
+        <a href="javascript:showSection('dataset-display')">Dataset</a>
+        <a href="javascript:showSection('user-profile')">Your profile</a>
+    </div>
+    <!-- 导航栏结束 -->
+
+    <!-- 首页 -->
+    <section id="home" class="section-content" style="display: block; background-color: #00468b; color: white; height: 100vh; display: flex; align-items: center; justify-content: center;">
+        <h1> Welcome to ELSA Calculation</h1>
+    </section>
+
+    <!-- 在线计算部分开始 -->
+    <section id="online-calc" class="section-content" style="background-color: #F7F8FC; padding: 20px; border-radius: 10px; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+    
+        <form action="/upload" method="post" enctype="multipart/form-data" style="display: flex; flex-direction: column; align-items: center; width: 100%; gap: 10px;">
+
+        <h2 style="color: #4A90E2;">Upload information about ELSA calculations</h2>
+
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+            <label>
+                <input type="file" name="dataFile" accept=".csv" required>
+                <span>Only files in CSV format are accepted, required</span>
+            </label>
+
+            <label>
+                <input type="file" name="extraFile" accept=".csv">
+                <span>Only files in CSV format are accepted, not required</span>
+            </label>
+
+            <label>
+                <input type="number" name="delayLimit" step="1" placeholder="Enter delaytime - default 0">
+            </label>
+
+            <label>
+                <input type="number" name="minoccur" step="1" placeholder="Enter minoccur - default 50">
+            </label>
+
+            <label>
+                <input type="number" name="precision" step="1" placeholder="Enter precision - Default arg_precision_default" >
+
+            <label>
+                <input type="number" name="repNum" step="1" placeholder="Enter repNum - default 1">
+            </label>
+
+            <label>
+                <input type="number" name="spotNum" step="1" placeholder="Enter spotNum - default 4">
+            </label>
+
+            <label>
+                <input type="number" name="trendThresh" step="any" placeholder="Enter trendThresh - Default None">
+            </label>
+
+            <label>
+                <input type="number" name="approxVar" step="any" placeholder="Enter approxVar - default 1.0">
+            </label>
+
+            <label>
+                <input type="number" name="progressive" step="1" placeholder="Enter progressive-default 1">
+            </label>
+
+            <h2>Parameter selection</h2>
+            <label>
+                <select name="qvalueMethod">
+                    <option value="scipy">scipy</option>
+                </select>
+                <span>qvalueMethod, default scipy</span>
+            </label>
+
+            <label>
+                <select name="pvalueMethod">
+                    <option value="perm">perm</option>
+                    <option value="theo">theo</option>
+                    <option value="mix">mix</option>
+                </select>
+                <span>pvalueMethod, default perm</span>
+            </label>
+
+           <label>
+        <select name="bootNum">
+            <option value="0">0</option>
+            <option value="100">100</option>
+            <option value="200">200</option>
+            <option value="500">500</option>
+            <option value="1000">1000</option>
+            <option value="2000">2000</option>
+        </select>
+               <span>bootNum, default 0</span>
+               </label>
+
+            <label>
+        <select name="transFunc">
+            <option value="simple">simple</option>
+            <option value="SD">SD</option>
+            <option value="Med">Med</option>
+            <option value="MAD">MAD</option>
+        </select>
+                <span>transFunc, default simple</span>
+        </label>
+
+              <label>
+        <select name="fillMethod">
+            <option value="none">none</option>
+            <option value="zero">zero</option>
+            <option value="liner">liner</option>
+            <option value="quadratic">quadratic</option>
+            <option value="curbic">curbic</option>
+            <option value="slinear">slinear</option>
+            <option value="nearest">nearest</option>
+        </select>
+                  <span>fillMethod, default none</span>
+                   </label>
+
+        <label>
+        <select name="normMethod">
+            <option value="robustZ">robustZ</option>
+            <option value="percentile">percentile</option>
+            <option value="percentileZ">percentileZ</option>
+            <option value="pnz">pnz</option>
+            <option value="rnz">rnz</option>
+            <option value="none">none</option>
+        </select>
+            <span>normMethod,default robustZ</span>
+        </label>
+            <!-- ... 其他输入字段按照上述模式进行 ... -->
+
+            <h2>The output file name of the ELSA calculation result</h2>
+            <label>
+                <input type="text" name="resultFile" placeholder="Enter the name of the file you want">
+            </label>
+
+            <input type="submit" value="click to submit" style="background-color: #4A90E2; color: #FFF; padding: 10px; border: none; border-radius: 5px; cursor: pointer;">
+        </div>
+    </form>
+
+    <h1 style="margin-top: 20px; color: #4A90E2;text-align: center;">Welcome to the Upload Page</h1>
+    <div style="text-align: center;">
+    <a href="{{ url_for('upload') }}" style="color: #4A90E2; text-decoration: none; margin-right: 10px;">Go to Upload Page</a>
+    <a href="{{ url_for('network') }}" style="color: #4A90E2; text-decoration: none;">Go to Network Page</a>
+</div>
+</section>
+
+    </section>
+
+    <!-- 在线计算部分结束 -->
+
+<!-- 数据集展示部分开始 -->
+<section id="dataset-display" class="section-content">
+    <div class="container">
+        <!-- Section Header -->
+        <div class="section-header">
+            <p>Please select the appropriate dataset to operate</p>
+        </div>
+
+        <!-- Data Table Container -->
+        <table id="dataset-table" class="display" style="width:100%">
+            <thead>
+                <tr>
+                    <th>Serial number</th>
+                    <th>Details entry for the dataset</th>
+                    <th>ELSA Caculation</th>
+                    <th>Build the network</th>
+                    <th>Operation</th>
+                    <th>Date of upload</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- 数据行将通过JavaScript填充 -->
+            </tbody>
+        </table>
+
+    </div>
+</section>
+<!-- 数据集展示部分结束 -->
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        var dataSet = [
+            // 示例数据 
+            [1, 'Dataset 1', '<button onclick="runElsa(1)">Run Elsa</button>', '<button onclick="displayNetwork(1)">Display Network</button>', '<button onclick="deleteDataset(1)">Delete</button><button onclick="addDataset()">Add</button>', '2023-10-28'],
+            [2, 'Dataset 2', '<button onclick="runElsa(2)">Run Elsa</button>', '<button onclick="displayNetwork(2)">Display Network</button>', '<button onclick="deleteDataset(2)">Delete</button><button onclick="addDataset()">Add</button>', '2023-10-28'],
+            // ... 添加更多数据集
+        ];
+        
+        $('#dataset-table').DataTable({
+            data: dataSet,
+            columns: [
+                { title: 'Serial number' },
+                { title: 'Details entry for the dataset' },
+                { title: 'ELSA Caculation' },
+                { title: 'Build the network' },
+                { title: 'Operation' },
+                { title: 'Date of upload' }
+
+            ]
+        });
+    });
+
+    function runElsa(id) {
+        // Elsa运算逻辑
+        window.location.href = 'javascript:showSection(\'online-calc\')';  // 跳转到在线计算页面
+}
+    
+
+    function displayNetwork(id) {
+        // 显示网络逻辑
+        alert('Display Network for Dataset ' + id);
+    }
+
+    function deleteDataset(id) {
+        // 删除数据集逻辑
+        alert('Delete Dataset ' + id);
+    }
+
+    function addDataset() {
+        // 添加数据集逻辑
+        alert('Add Dataset');
+    }
+
+    function showdate() {
+        // 显示日期逻辑
+        alert('Show Date' + id);
+    }
+</script>
+
+
+
+
+
+
+    <!-- 用户简历部分开始 -->
+<section id="user-profile" class="section-content">
+    <div class="container">
+        <!-- 区域头部 -->
+        <div class="section-header">
+            <h2>用户个人资料</h2>
+            <p>查看和更新您的个人信息。</p>
+        </div>
+
+        <!-- 用户个人资料信息 -->
+        <div class="row">
+            <!-- 头像和姓名 -->
+            <div class="col-md-4 text-center">
+                <img src="path_to_avatar.jpg" alt="用户头像" class="img-thumbnail rounded-circle" style="width: 200px; height: 200px;">
+                <h3>张三</h3>
+            </div>
+
+            <!-- 个人资料详情 -->
+            <div class="col-md-8">
+                <form>
+                    <div class="form-group">
+                        <label for="username">用户名:</label>
+                        <input type="text" class="form-control" id="username" value="zhang_san" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">电子邮件:</label>
+                        <input type="email" class="form-control" id="email" value="zhangsan@example.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">电话:</label>
+                        <input type="tel" class="form-control" id="phone" value="123-456-7890">
+                    </div>
+                    <button type="submit" class="btn btn-primary">更新资料</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 用户简历部分结束 -->
+
+
+</body>
+</html>
